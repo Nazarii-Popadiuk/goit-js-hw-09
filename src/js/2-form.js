@@ -14,6 +14,14 @@ function getFromLS(key, defaultValue) {
     }
 }
 
+    const lsData = getFromLS('formData');
+    if(lsData) {
+        formData.email = lsData.email || '';
+        formData.message = lsData.message || '';
+        formEl.elements.email.value = formData.email;
+        formEl.elements.message.value = formData.message;
+}
+
 formEl.addEventListener('input', e => {
     const email = e.currentTarget.elements.email.value;
     const message = e.currentTarget.elements.message.value;
@@ -23,24 +31,17 @@ formEl.addEventListener('input', e => {
     saveToLS('formData', formData);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const lsData = getFromLS('formData');
-    if(lsData) {
-        formData.email = lsData.email || '';
-        formData.message = lsData.message || '';
-        formEl.elements.email.value = formData.email;
-        formEl.elements.message.value = formData.message;
-    } 
-});
 
 formEl.addEventListener('submit', (e) => {
     e.preventDefault();
+    const email = formData.email.trim();
+    const message = formData.message.trim();
 
-if (!formData.email || !formData.message) {
+if (!email || !message) {
     alert('Fill please all fields');
     return;
 }
-console.log('Submitted', formData);
+console.log('Submitted', {email, message});
 formEl.reset();
 localStorage.removeItem('formData');
 formData.email = '';
